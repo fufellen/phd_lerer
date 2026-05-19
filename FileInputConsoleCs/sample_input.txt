@@ -1,3 +1,0 @@
-First line from a console application.
-Second line: file input works with current tools.
-Third line: this executable is built with the system C# compiler.

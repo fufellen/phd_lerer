@@ -1,3 +1,0 @@
-First line from a Qt console application.
-Second line: file input works.
-Third line: pass this file path as an argument or type it in the console.
