@@ -2,6 +2,10 @@
 #include <time.h>
 #include <math.h>
 
+#ifndef CLK_TCK
+#define CLK_TCK CLOCKS_PER_SEC
+#endif
+
 
 extern FILE *out;
 

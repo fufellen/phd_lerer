@@ -32,7 +32,7 @@ void compl_sqrt(double x, double y, double *Re, double *Im)
 	*Im = mod * sin(fi);
 }//compl_sqrt
 
-exp_compl(double x, double y, double *re, double *ie)//exp(iz)
+void exp_compl(double x, double y, double *re, double *ie)//exp(iz)
 {
 	double r_ex;
 	r_ex = exp(-y);

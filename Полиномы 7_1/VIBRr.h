@@ -51,7 +51,7 @@ void R_T_dop(int PP, int m_u, int nu, double alf, double *rR_, double *iR_, doub
 
 void compl_cos_sin(double x, double y, double *Rec, double *Imc, double *Res, double *Ims);
 void compl_sqrt(double x, double y, double *Re, double *Im);
-exp_compl(double x, double y, double *re, double *ie);//exp(iz)
+void exp_compl(double x, double y, double *re, double *ie);//exp(iz)
 
 double bess_dr_real(int n, double x, double eps, double nu, int i);//Функция Бесселя Jn+nu(x)/ x^nu
 double gamma(double x);
