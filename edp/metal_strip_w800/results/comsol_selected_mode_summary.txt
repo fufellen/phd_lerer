@@ -1,0 +1,6 @@
+COMSOL selected-mode comparison at lambda=500 nm
+Target analytic/EIM-like branch: neff = 2.068588790 + 0.101873434i, n''/n' = 0.049247794
+Selected COMSOL plasmonic mode: neff = 1.952123351 + 0.083322911i, n''/n' = 0.042683220
+Difference: Delta n' = -0.116465439 (-5.630%), Delta ratio = -0.006564573 (-13.330%)
+Selection rule: among modes with Re(neff)>1.45 and Im(neff)>1e-3, choose the smallest complex distance to the analytic W=800 nm estimate.
+Number of COMSOL modes in table: 20; plasmonic candidates by this filter: 5.

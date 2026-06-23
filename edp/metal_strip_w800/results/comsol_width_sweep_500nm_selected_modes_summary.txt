@@ -1,0 +1,8 @@
+COMSOL width sweep selected modes at lambda=500 nm
+Selection rule: Re(neff)>1.45 and |Im(neff)|>1e-3, then closest complex neff to analytic EDP-like target.
+
+width_nm  analytic_neff              comsol_neff                analytic_ratio  comsol_ratio  analytic_Lum  comsol_Lum  delta_Re_percent  delta_ratio_percent
+     400  2.015130480+0.101571064i  1.817902998+0.093951227i  0.050404212  0.051681100  0.3917  0.4235            -9.787                2.533
+     800  2.068588790+0.101873434i  1.952123351+0.083322911i  0.049247794  0.042683220  0.3906  0.4775            -5.630              -13.330
+    1200  2.079762300+0.101656032i  1.970851862+0.082076542i  0.048878678  0.041645211  0.3914  0.4848            -5.237              -14.799
+    2000  2.085784050+0.101477321i  1.979389720+0.081584740i  0.048651883  0.041217118  0.3921  0.4877            -5.101              -15.282

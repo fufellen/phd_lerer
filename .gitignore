@@ -1,8 +1,16 @@
 build/
 .vs/
+__pycache__/
+*.py[cod]
 *.user
 *.suo
 *.obj
 *.pdb
 *.ilk
 *.exe
+*.class
+*.log
+*.mph
+*.mphbin
+*.recovery
+*.status
