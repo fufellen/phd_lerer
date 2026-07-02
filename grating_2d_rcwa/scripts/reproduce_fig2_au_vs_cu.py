@@ -55,7 +55,7 @@ def run(material_n_mat: int, material_name: str, N: int = 6) -> tuple[np.ndarray
     eps_out = n_sub ** 2 + 1e-9j
 
     lo, hi = ema.MATERIAL_RANGE_NM[material_n_mat]
-    lam_grid = np.arange(max(350.0, lo), min(900.0, hi), 5.0)
+    lam_grid = np.arange(max(210.0, lo), min(900.0, hi), 5.0)
 
     R_list, T_list, P_list = [], [], []
     for lam in lam_grid:
@@ -136,6 +136,20 @@ def main() -> None:
     print(f"Условие Фрёлиха (из composite_ema): Au ~540 нм, Cu ~528 нм")
     print(f"P_max Au = {P_au.max():.3f}, P_max Cu = {P_cu.max():.3f} - цель P>0.8: "
           f"{'ДОСТИГНУТА' if max(P_au.max(), P_cu.max()) > 0.8 else 'НЕ достигнута'}")
+
+    uv_mask_au = lam_au <= 400.0
+    uv_mask_cu = lam_cu <= 400.0
+    if uv_mask_au.any() and uv_mask_cu.any():
+        p_au_uv = P_au[uv_mask_au].mean()
+        p_cu_uv = P_cu[uv_mask_cu].mean()
+        print(f"УФ (<=400 нм), среднее P: Au = {p_au_uv:.3f}, Cu = {p_cu_uv:.3f}")
+        if p_au_uv > p_cu_uv:
+            print("Согласуется с рис. 2 статьи: Au поглощает в УФ сильнее, чем Cu.")
+        else:
+            print("РАСХОЖДЕНИЕ с рис. 2 статьи: в этой модели Cu поглощает в УФ сильнее Au "
+                  "(см. обсуждение в итоговой заметке о воспроизведении - возможно, разные "
+                  "первоисточники оптических констант Au/Cu, или эффект не воспроизводится "
+                  "в 1D-приближении решётки).")
 
 
 if __name__ == "__main__":
