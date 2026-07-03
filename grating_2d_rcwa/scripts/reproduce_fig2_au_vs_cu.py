@@ -133,7 +133,7 @@ def main() -> None:
     peak_au_lam = lam_au[np.argmax(P_au)]
     peak_cu_lam = lam_cu[np.argmax(P_cu)]
     print(f"Резонанс Au (P max): {peak_au_lam:.0f} нм; резонанс Cu (P max): {peak_cu_lam:.0f} нм")
-    print(f"Условие Фрёлиха (из composite_ema): Au ~540 нм, Cu ~528 нм")
+    print(f"Условие Фрёлиха (из composite_ema, Johnson & Christy 1972): Au ~555 нм, Cu ~567 нм")
     print(f"P_max Au = {P_au.max():.3f}, P_max Cu = {P_cu.max():.3f} - цель P>0.8: "
           f"{'ДОСТИГНУТА' if max(P_au.max(), P_cu.max()) > 0.8 else 'НЕ достигнута'}")
 
