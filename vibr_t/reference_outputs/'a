@@ -1,0 +1,438 @@
+
+
+    N_az = 50    N_rad=200   ft_l=1.000e-004
+
+    TET = 0.000    FI= 0.000
+
+  dx =500.000  dy =500.000
+
+  n= 1 Ax_t[n]=300.000 Ay_t[n]=300.000 Ax_b[n]=300.000 Ay_b[n]=300.000 fi_0[n]= 0.00
+
+  n[1]= 1.00000  k[1] = 0.00000
+  n[2]= 1.00000  k[2] = 0.00000  H[1] =100.000   Hole
+  n[3]= 1.77000  k[3] = 0.00000  H[2] =450.000
+  n[4]= 1.45000  k[4] = 0.00000  H[3] =325.000
+  n[5]= 1.45000  k[5] = 0.00000
+
+  n= 1  m= 1
+ A_t[n][m]=300.000 B_t[n][m]=300.000 A_b[n][m]=300.000 B_b[n][m]=300.000
+   n_l[n][m]=1.770  k_l[n][m]=0.000
+
+ XC[1]=0.000  YC[1]=0.000
+
+
+
+  N_g=50  M_z=10      M_fi= 3  M_r= 3   M_z_calc= 4  M_s=180
+
+  lamda =  200.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.05993  0.00524 9.241e-001
+	            		 To p: 0.00000      To s: 0.05993
+
+
+         p - POLARIZATION
+  0  0 0.05993  0.00524 9.241e-001
+	            		 To p: 0.05993      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  205.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.05289  0.00441 9.332e-001
+	            		 To p: 0.00000      To s: 0.05289
+
+
+         p - POLARIZATION
+  0  0 0.05289  0.00441 9.332e-001
+	            		 To p: 0.05289      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  210.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.03301  0.00431 9.439e-001
+	            		 To p: 0.00000      To s: 0.03301
+
+
+         p - POLARIZATION
+  0  0 0.03301  0.00431 9.439e-001
+	            		 To p: 0.03301      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  215.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.03401  0.00422 9.361e-001
+	            		 To p: 0.00000      To s: 0.03401
+
+
+         p - POLARIZATION
+  0  0 0.03401  0.00422 9.361e-001
+	            		 To p: 0.03401      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  220.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.04210  0.00412 9.265e-001
+	            		 To p: 0.00000      To s: 0.04210
+
+
+         p - POLARIZATION
+  0  0 0.04210  0.00412 9.265e-001
+	            		 To p: 0.04210      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  225.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.04268  0.00399 9.203e-001
+	            		 To p: 0.00000      To s: 0.04268
+
+
+         p - POLARIZATION
+  0  0 0.04268  0.00399 9.203e-001
+	            		 To p: 0.04268      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  230.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.04528  0.00379 9.287e-001
+	            		 To p: 0.00000      To s: 0.04528
+
+
+         p - POLARIZATION
+  0  0 0.04528  0.00379 9.287e-001
+	            		 To p: 0.04528      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  235.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.03141  0.00375 9.296e-001
+	            		 To p: 0.00000      To s: 0.03141
+
+
+         p - POLARIZATION
+  0  0 0.03141  0.00375 9.296e-001
+	            		 To p: 0.03141      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  240.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.03298  0.00360 9.330e-001
+	            		 To p: 0.00000      To s: 0.03298
+
+
+         p - POLARIZATION
+  0  0 0.03298  0.00360 9.330e-001
+	            		 To p: 0.03298      To s: 0.00000   M_z_calc= 4  M_s=180
+
+  lamda =  245.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02765  0.00351 9.247e-001
+	            		 To p: 0.00000      To s: 0.02765
+
+
+         p - POLARIZATION
+  0  0 0.02765  0.00351 9.247e-001
+	            		 To p: 0.02765      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  250.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02881  0.00327 9.199e-001
+	            		 To p: 0.00000      To s: 0.02881
+
+
+         p - POLARIZATION
+  0  0 0.02875  0.00327 9.201e-001
+	            		 To p: 0.02875      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  255.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02498  0.00303 9.081e-001
+	            		 To p: 0.00000      To s: 0.02498
+
+
+         p - POLARIZATION
+  0  0 0.02498  0.00303 9.081e-001
+	            		 To p: 0.02498      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  260.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02891  0.00299 9.079e-001
+	            		 To p: 0.00000      To s: 0.02891
+
+
+         p - POLARIZATION
+  0  0 0.02891  0.00299 9.079e-001
+	            		 To p: 0.02891      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  265.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.03266  0.00320 9.093e-001
+	            		 To p: 0.00000      To s: 0.03266
+
+
+         p - POLARIZATION
+  0  0 0.03264  0.00320 9.094e-001
+	            		 To p: 0.03264      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  270.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02670  0.00356 9.094e-001
+	            		 To p: 0.00000      To s: 0.02670
+
+
+         p - POLARIZATION
+  0  0 0.02670  0.00356 9.094e-001
+	            		 To p: 0.02670      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  275.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02958  0.00401 9.147e-001
+	            		 To p: 0.00000      To s: 0.02958
+
+
+         p - POLARIZATION
+  0  0 0.02958  0.00401 9.147e-001
+	            		 To p: 0.02958      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  280.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02443  0.00454 9.156e-001
+	            		 To p: 0.00000      To s: 0.02443
+
+
+         p - POLARIZATION
+  0  0 0.02443  0.00454 9.156e-001
+	            		 To p: 0.02443      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  285.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.01764  0.00526 9.145e-001
+	            		 To p: 0.00000      To s: 0.01764
+
+
+         p - POLARIZATION
+  0  0 0.01764  0.00526 9.145e-001
+	            		 To p: 0.01764      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  290.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02247  0.00605 9.076e-001
+	            		 To p: 0.00000      To s: 0.02247
+
+
+         p - POLARIZATION
+  0  0 0.02247  0.00605 9.076e-001
+	            		 To p: 0.02247      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  295.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.01320  0.00675 8.970e-001
+	            		 To p: 0.00000      To s: 0.01320
+
+
+         p - POLARIZATION
+  0  0 0.01320  0.00675 8.970e-001
+	            		 To p: 0.01320      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  300.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.01074  0.00780 8.900e-001
+	            		 To p: 0.00000      To s: 0.01074
+
+
+         p - POLARIZATION
+  0  0 0.01074  0.00780 8.900e-001
+	            		 To p: 0.01074      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  305.000 
+
+  p  q     Rpq         Tpq            delta P
+
+    N_az = 50    N_rad=200   ft_l=1.000e-004
+
+    TET = 0.000    FI= 0.000
+
+  dx =500.000  dy =500.000
+
+  n= 1 Ax_t[n]=300.000 Ay_t[n]=300.000 Ax_b[n]=300.000 Ay_b[n]=300.000 fi_0[n]= 0.00
+
+  n[1]= 1.00000  k[1] = 0.00000
+  n[2]= 1.00000  k[2] = 0.00000  H[1] =100.000   Hole
+  n[3]= 1.77000  k[3] = 0.00000  H[2] =450.000
+  n[4]= 1.45000  k[4] = 0.00000  H[3] =325.000
+  n[5]= 1.45000  k[5] = 0.00000
+
+  n= 1  m= 1
+ A_t[n][m]=300.000 B_t[n][m]=300.000 A_b[n][m]=300.000 B_b[n][m]=300.000
+   n_l[n][m]=1.770  k_l[n][m]=0.000
+
+ XC[1]=0.000  YC[1]=0.000
+
+
+
+  N_g=50  M_z=10      M_fi= 3  M_r= 3   M_z_calc= 4  M_s=180
+
+  lamda =  200.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.06521  0.00473 9.141e-001
+	            		 To p: 0.00000      To s: 0.06521
+
+
+         p - POLARIZATION
+  0  0 0.06521  0.00473 9.141e-001
+	            		 To p: 0.06521      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  450.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.00721  0.03291 8.875e-001
+	            		 To p: 0.00000      To s: 0.00721
+
+
+         p - POLARIZATION
+  0  0 0.00721  0.03291 8.875e-001
+	            		 To p: 0.00721      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  700.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02276  0.63838 3.125e-001
+	            		 To p: 0.00000      To s: 0.02276
+
+
+         p - POLARIZATION
+  0  0 0.02276  0.63838 3.125e-001
+	            		 To p: 0.02276      To s: 0.00000
+ time is  0: 0:2.90 
+
+
+
+__________________________________________________________________
+
+    N_az = 50    N_rad=200   ft_l=1.000e-004
+
+    TET = 0.000    FI= 0.000
+
+  dx =500.000  dy =500.000
+
+  n= 1 Ax_t[n]=300.000 Ay_t[n]=300.000 Ax_b[n]=300.000 Ay_b[n]=300.000 fi_0[n]= 0.00
+
+  n[1]= 1.00000  k[1] = 0.00000
+  n[2]= 1.00000  k[2] = 0.00000  H[1] =100.000   Hole
+  n[3]= 1.77000  k[3] = 0.00000  H[2] =450.000
+  n[4]= 1.45000  k[4] = 0.00000  H[3] =325.000
+  n[5]= 1.45000  k[5] = 0.00000
+
+  n= 1  m= 1
+ A_t[n][m]=300.000 B_t[n][m]=300.000 A_b[n][m]=300.000 B_b[n][m]=300.000
+   n_l[n][m]=1.770  k_l[n][m]=0.000
+
+ XC[1]=0.000  YC[1]=0.000
+
+
+
+  N_g=50  M_z=10      M_fi= 3  M_r= 3   M_z_calc= 4  M_s=180
+
+  lamda =  200.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.06521  0.00473 9.141e-001
+	            		 To p: 0.00000      To s: 0.06521
+
+
+         p - POLARIZATION
+  0  0 0.06521  0.00473 9.141e-001
+	            		 To p: 0.06521      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  450.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.00721  0.03291 8.875e-001
+	            		 To p: 0.00000      To s: 0.00721
+
+
+         p - POLARIZATION
+  0  0 0.00721  0.03291 8.875e-001
+	            		 To p: 0.00721      To s: 0.00000   M_z_calc= 3  M_s=135
+
+  lamda =  700.000 
+
+  p  q     Rpq         Tpq            delta P
+
+         s - POLARIZATION
+  0  0 0.02276  0.63838 3.125e-001
+	            		 To p: 0.00000      To s: 0.02276
+
+
+         p - POLARIZATION
+  0  0 0.02276  0.63838 3.125e-001
+	            		 To p: 0.02276      To s: 0.00000
+ time is  0: 0:2.89 
+
+
+
+__________________________________________________________________

@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{d1fd1a47-8fb4-4bdb-8f8c-ba67d581f9eb}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{d043410e-73ed-4a52-a458-d929d3ccdd5d}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{be54a313-59c2-45c1-b9b5-1066c574f122}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CONST.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CONVERG.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D_N_PER.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DIAGON.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DROITE.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="E_extern.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EXTERN.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F_df.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Fun.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MLAP.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NOMER.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VIBR.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vvod.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ancillary.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RECUR.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MATR_.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BASIS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ZERO_new.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MEMORY.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DIAGON_N.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RECUR_ZERO.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BIBL_mat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MLAP.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VIBRr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
