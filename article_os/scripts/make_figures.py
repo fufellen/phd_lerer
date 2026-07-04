@@ -316,7 +316,7 @@ def fig6_constants():
     ax.set_xlim(200, 900)
     ax.set_ylim(-35, 15)
     label_curve(ax, 340, 1.5, "1")
-    label_curve(ax, 640, -13.5, "2")
+    label_curve(ax, 640, -21, "2")
     panel_letter(ax, "a")
 
     ax = axes[1]
@@ -348,7 +348,7 @@ def fig7_p_two_bases():
     ax.set_ylabel("P")
     ax.set_ylim(0, 1)
     label_curve(ax, 250, 0.88, "1")
-    label_curve(ax, 330, 0.55, "2")
+    label_curve(ax, 400, 0.38, "2")
     panel_letter(ax, "a")
 
     ax = axes[1]
