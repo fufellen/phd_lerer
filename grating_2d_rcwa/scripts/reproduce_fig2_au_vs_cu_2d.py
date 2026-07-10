@@ -125,8 +125,14 @@ def main() -> None:
     print("\n--- Оценка (2D цилиндры) ---")
     peak_au_lam = lam_au[np.argmax(P_au)]
     peak_cu_lam = lam_cu[np.argmax(P_cu)]
+    eps_h_real = 1.77 ** 2
+    frohlich_au = ema.find_frohlich_crossing(ema.eps_au, eps_h_real, float(lam_au[0]), float(lam_au[-1]))
+    frohlich_cu = ema.find_frohlich_crossing(ema.eps_cu, eps_h_real, float(lam_cu[0]), float(lam_cu[-1]))
     print(f"Резонанс Au (P max): {peak_au_lam:.0f} нм; Cu (P max): {peak_cu_lam:.0f} нм")
-    print(f"Условие Фрёлиха (composite_ema): Au ~540 нм, Cu ~528 нм")
+    print(
+        "Условие Фрёлиха (composite_ema, текущая материальная база): "
+        f"Au ~{frohlich_au.lam_nm:.1f} нм, Cu ~{frohlich_cu.lam_nm:.1f} нм"
+    )
     print(f"P_max Au = {P_au.max():.3f}, P_max Cu = {P_cu.max():.3f}")
 
     uv_mask_au = lam_au <= 400.0
