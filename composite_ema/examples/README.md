@@ -43,7 +43,7 @@ python composite_ema/examples/ema_models_demo.py
 double eps_m_re = 1.77 * 1.77, eps_m_im = 0.0;  /* матрица, eps = eps' - i eps'' */
 double C = 0.10;                                /* объёмная доля частиц */
 double re, im;
-int n_mat = 4;                                  /* 4 = Au (см. комментарий в COMPOSIT.c) */
+int n_mat = 3;                                  /* 3 = Au в диспетчере BIBL_mat.c */
 
 f = 535.0;                                      /* длина волны, нм (глобальная) */
 
@@ -51,6 +51,16 @@ COMPOSITE     (eps_m_re, eps_m_im, C, n_mat,        &re, &im);  /* формул�
 BRUGGEMAN     (eps_m_re, eps_m_im, C, n_mat,        &re, &im);  /* формула (4) */
 COMPOSITE_MLWA(eps_m_re, eps_m_im, C, n_mat, 30.0,  &re, &im);  /* MLWA, R_p=30 нм */
 ```
+
+> **Внимание: две несовпадающие нумерации материалов.** В рабочем диспетчере
+> `libmat()` (`source_c/luxpop_lerer/BIBL_mat.c`) принято `1 = Cu, 2 = Ag,
+> **3 = Au**, 4 = ZnO`. Комментарий в `COMPOSIT.c` и Python-порт используют
+> другую, историческую схему, где `4 = Au`. При работе с реальной базой Лерера
+> действует нумерация `BIBL_mat.c`: `n_mat = 4` даст **ZnO, а не золото**.
+> Полная карта индексов - в `source_c/luxpop_lerer/README.md`.
+>
+> Там же в шапке `BIBL_mat.c` три материала подряд подписаны как `is = 17`
+> (TaN, TiN, ZrN), тогда как в теле `switch` это `17`, `18` и `19`.
 
 Смесь двух сортов частиц (формула (5), исправленная реализация):
 
