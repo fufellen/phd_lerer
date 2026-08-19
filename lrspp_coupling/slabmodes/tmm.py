@@ -51,7 +51,12 @@ except ModuleNotFoundError:  # pragma: no cover
     _scipy_root = None
 
 # numpy < 2.0 не знает trapezoid, numpy >= 2.0 объявил trapz устаревшим
-_trapz = getattr(np, "trapezoid", None) or np.trapz
+_trapz = getattr(np, "trapezoid", None) or getattr(np, "trapz")
+
+
+def trapz(y, x):
+    """Интегрирование по правилу трапеций, совместимое с numpy 1.x и 2.x."""
+    return _trapz(y, x)
 
 
 # ---------------------------------------------------------------- геометрия

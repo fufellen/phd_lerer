@@ -24,6 +24,7 @@ from .tmm import (
     solve_mode,
     tm_residual,
     tm_residual_3layer,
+    trapz,
 )
 from .eim import solve_strip, strip_cutoff_width
 from .cmt import CoupledPair, CouplerModel, extract_kappa, optimal_length_um
@@ -42,6 +43,7 @@ __all__ = [
     "solve_mode",
     "tm_residual",
     "tm_residual_3layer",
+    "trapz",
     "solve_strip",
     "strip_cutoff_width",
     "CoupledPair",
