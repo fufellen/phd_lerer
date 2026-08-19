@@ -158,6 +158,64 @@ def analyse(table: WidthTable, junction_db: float) -> list[dict]:
     return rows
 
 
+def excess_loss_fit(rows: list[dict]) -> dict:
+    """Подгонка измеренных потерь перехода моделью "полка плюс погонные потери".
+
+    Если весь рост с длиной вызван потерями внутри самого перехода, то
+
+        CL(L) = CL_0 + alpha_taper * L,
+
+    и наклон прямой прямо даёт погонные потери в области сужения. Точка с самым
+    коротким переходом исключается: там работает отдельный механизм - рост при
+    слишком резком сужении, видимый в измерениях как загиб вверх.
+    """
+    pts = sorted((r["length"], r["measured_db"]) for r in rows)
+    fit_pts = [p for p in pts if p[0] >= 3.0]
+    x = np.array([p[0] for p in fit_pts])
+    y = np.array([p[1] for p in fit_pts])
+    slope, intercept = np.polyfit(x, y, 1)
+    resid = y - (slope * x + intercept)
+    return {
+        "alpha_db_per_um": float(slope),
+        "alpha_db_per_cm": float(slope * 1e4),
+        "intercept_db": float(intercept),
+        "max_resid_db": float(np.max(np.abs(resid))),
+        "points": fit_pts,
+    }
+
+
+def lateral_confinement(table: WidthTable) -> list[dict]:
+    """Насколько прочно мода удерживается по ширине вдоль перехода.
+
+    Слабо связанная мода легко теряет мощность на любой неоднородности края,
+    поэтому длина спадания поля в обкладке - показатель уязвимости перехода.
+    """
+    rows = []
+    for w in (3.0, 4.0, 5.0, 6.0):
+        n = table(w).real
+        delta = max(n - N_CLAD, 1e-12)
+        gamma = K0 * np.sqrt(max(n * n - N_CLAD**2, 1e-12))
+        rows.append({"width": w, "neff": n, "delta_n": delta, "decay_um": 1.0 / gamma})
+    return rows
+
+
+def horizontal_mode_count(n_planar: complex, width_um: float) -> dict:
+    """Число связанных мод горизонтальной задачи для заданной ветви.
+
+    Симметричный волновод: следующая чётная мода появляется при V > pi,
+    ближайшая нечётная - при V > pi/2. Симметричный переход нечётные моды не
+    возбуждает, поэтому определяющий порог здесь именно pi.
+    """
+    na = float(np.sqrt(max(n_planar.real**2 - N_CLAD**2, 0.0)))
+    v = K0 * (width_um / 2.0) * na
+    return {
+        "width": width_um,
+        "V": float(v),
+        "even_modes": int(np.floor(v / np.pi)) + 1,
+        "odd_modes": int(np.floor((v - np.pi / 2) / np.pi)) + 1 if v > np.pi / 2 else 0,
+    }
+
+
 def make_plot(rows: list[dict], table: WidthTable) -> None:
     lengths = np.array([r["length"] for r in rows])
     order = np.argsort(lengths)
@@ -249,7 +307,52 @@ def main() -> int:
         add(f"   {r['length']:6.1f}   {r['angle_deg']:12.2f}   {r['omega_limit_deg']:15.3f}   "
             f"{r['violation']:9.1f}")
     add("")
-    add("4. Погонные потери вдоль перехода")
+    add("4. Избыточный канал: подгонка измеренных данных")
+    fit = excess_loss_fit(rows)
+    add(f"   модель CL(L) = CL_0 + alpha * L по точкам от 3 до 240 мкм:")
+    add(f"     полка CL_0        = {fit['intercept_db']:.3f} дБ")
+    add(f"     наклон alpha      = {fit['alpha_db_per_cm']:.1f} дБ/см")
+    add(f"     макс. невязка     = {fit['max_resid_db']:.3f} дБ")
+    add("   То есть весь рост с длиной описывается одной постоянной погонной потерей")
+    add("   внутри перехода, и вопрос сводится к её величине.")
+    straight = 0.5 * (PAPER_PL_IMIMI[3.0] + PAPER_PL_IMIMI[6.0])
+    calc = 0.5 * (table.alpha_db_per_cm(3.0) + table.alpha_db_per_cm(6.0))
+    add(f"   прямой волновод той же ширины, измерено: {straight:.2f} дБ/см")
+    add(f"   прямой волновод той же ширины, расчёт:   {calc:.2f} дБ/см")
+    add(f"   превышение над измеренным прямым: в {fit['alpha_db_per_cm'] / straight:.1f} раза")
+    add("")
+    add("   Что исключено как причина:")
+    add("     поглощение по ставке прямого волновода - объясняет только пятую часть;")
+    add("     неадиабатичность - даёт рост при УКОРОЧЕНИИ перехода, знак обратный;")
+    add("     недоучёт длины в формуле (1) статьи - величина порядка 0.06 дБ, мало;")
+    add("     переход между вертикальными ветвями - в разделимом приближении")
+    add("       запрещён: вертикальный профиль вдоль сужения не меняется, поэтому")
+    add("       ветви остаются ортогональными при любой ширине.")
+    add("")
+    add("5. Насколько прочно мода держится по ширине")
+    add("   W, мкм   n_eff      n_eff - n_обкл   длина спадания, мкм")
+    for r in lateral_confinement(table):
+        add(f"   {r['width']:5.1f}   {r['neff']:.6f}   {r['delta_n']:12.2e}   {r['decay_um']:16.1f}")
+    add("   Мода удерживается слабо, и её хвост простирается на единицы микрометров")
+    add("   за край полоски. Наклонная кромка на такой длине работает как протяжённая")
+    add("   неоднородность, поэтому рабочая гипотеза для избыточного канала -")
+    add("   рассеяние на наклонной кромке металла, растущее пропорционально её длине.")
+    add("   Проверяется прямым волноводом с наклонной кромкой той же длины.")
+    add("")
+    add("6. Одномодовость горизонтальной задачи")
+    add("   Определяет, нужен ли многомодовый продольный расчёт.")
+    add("   ветвь        W, мкм   V      чётных мод   нечётных мод")
+    for label, n_pl in (("ДМД  ", solve_mode(imi_stack(), K0, complex(1.4512, 2e-5))),
+                        ("ДМДМД", solve_mode(imimi_stack(), K0, complex(1.4534, 7e-5)))):
+        for w in (3.0, 6.0):
+            c = horizontal_mode_count(n_pl, w)
+            add(f"   {label}        {c['width']:4.1f}   {c['V']:.3f}   {c['even_modes']:10d}   {c['odd_modes']:12d}")
+    add("   Во всём диапазоне ширин перехода горизонтальная задача одномодовая:")
+    add("   следующая чётная мода требует V > pi, следующая нечётная - V > pi/2, а")
+    add("   симметричный переход нечётные моды и не возбуждает. Поэтому многомодовый")
+    add("   продольный расчёт с базисом излучательных мод здесь ничего не добавит.")
+    add("")
+    add("7. Погонные потери вдоль перехода")
     for w in (3.0, 4.0, 5.0, 6.0):
         ref = f"   измерено {PAPER_PL_IMIMI[w]:.2f}" if w in PAPER_PL_IMIMI else ""
         add(f"   ширина {w:.1f} мкм: расчёт {table.alpha_db_per_cm(w):6.2f} дБ/см{ref}")
