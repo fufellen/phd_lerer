@@ -50,6 +50,43 @@ DOMAIN = 30.0
 
 PAPER = {"imi": 1.89, "imimi": 5.01}  # дБ/см, измерено при ширине 3 мкм
 
+# Полные измеренные ряды из рис. 3 статьи, дБ/см
+MEAS_IMI = {2.0: 1.86, 3.0: 1.89, 4.0: 2.33, 5.0: 3.32, 6.0: 4.38, 7.0: 5.19, 8.0: 5.84}
+MEAS_IMIMI = {2.0: 2.15, 3.0: 5.01, 4.0: 7.41, 5.0: 8.42, 6.0: 8.97}
+
+
+def ceiling_test(a: dict) -> list[str]:
+    """Проверка измерений на физический потолок модального поглощения.
+
+    У полоски конечной ширины перекрытие моды с металлом всегда меньше, чем у
+    бесконечно широкой плёнки, поэтому модальные потери полоски строго меньше
+    планарных. Планарное значение - абсолютный потолок. Измерение выше потолка
+    означает, что в него входит не только поглощение моды.
+    """
+    out = []
+    ceil_i = propagation_loss_db_per_cm(a["imi_planar"], LAMBDA_UM)
+    ceil_m = propagation_loss_db_per_cm(a["imimi_planar"], LAMBDA_UM)
+    out.append(f"Потолок модального поглощения: ДМД {ceil_i:.3f}, ДМДМД {ceil_m:.3f} дБ/см")
+    out.append("  W, мкм   ДМД измер.  доля потолка   ДМДМД измер.  доля потолка")
+    over = []
+    for w in sorted(MEAS_IMI):
+        mi = MEAS_IMI[w]
+        mm = MEAS_IMIMI.get(w)
+        fi = mi / ceil_i
+        fm = mm / ceil_m if mm else None
+        mark = "  ВЫШЕ ПОТОЛКА" if fi > 1.0 else ""
+        if fi > 1.0:
+            over.append(w)
+        out.append(f"  {w:5.1f}   {mi:10.2f}  {fi:12.2f}   "
+                   f"{(f'{mm:12.2f}' if mm else '           -')}  "
+                   f"{(f'{fm:12.2f}' if fm else '           -')}{mark}")
+    if over:
+        out.append(f"  Измеренные потери ДМД превышают потолок при ширинах {over} мкм,")
+        out.append("  то есть содержат вклад, не сводящийся к поглощению моды в металле.")
+        out.append("  Поэтому измеренное отношение потерь ДМДМД к ДМД не является модальной")
+        out.append("  величиной, и расчёт не обязан его воспроизводить.")
+    return out
+
 
 def analytic() -> dict[str, complex]:
     imi = Stack(eps=(EPS_CLAD, EPS_AU, EPS_CLAD), thickness=(T_AU_UM,))
@@ -109,6 +146,10 @@ def main() -> int:
     add("Потери ДМД против ДМДМД: метод эффективного показателя и полновекторный FEM")
     add(f"Ширина полоски {WIDTH_UM:g} мкм, золото {T_AU_UM * 1000:.0f} нм, "
         f"центральный слой ДМДМД {T_GAP_UM * 1000:.0f} нм, область {DOMAIN:g} мкм")
+    add("")
+
+    for line in ceiling_test(a):
+        add(line)
     add("")
 
     rows = []
