@@ -3,7 +3,7 @@
 Запуск:
     python lrspp_coupling/scripts/selftest.py
 
-Проверяется пять независимых вещей:
+Проверяется шесть независимых вещей:
 1. общая N-слойная невязка совпадает с трёхслойной формулой из edp/metal_strip_w800,
    уже сверенной с COMSOL;
 2. толстая металлическая плёнка даёт ППП одиночной границы с аналитическим n_eff;
@@ -12,7 +12,9 @@
 4. симметричный диэлектрический слой совпадает со стандартным трансцендентным
    уравнением для чётной TM-моды;
 5. восстановленное поле непрерывно на границах, спадает в полупространствах,
-   а перекрытие моды с самой собой равно единице.
+   а перекрытие моды с самой собой равно единице;
+6. восстановленные E и H подставляются в уравнения Максвелла: невязка законов
+   Фарадея и Ампера должна быть на уровне ошибки конечной разности.
 """
 
 from __future__ import annotations
@@ -266,6 +268,94 @@ def test_field_reconstruction() -> None:
         )
 
 
+# ---------------------------------------------------------------- проверка 6
+
+
+def test_maxwell_residual() -> None:
+    """Прямая подстановка восстановленного поля в уравнения Максвелла.
+
+    В нормировке mode_fields (длины в мкм, E~ = omega eps0 E / 1e6, H~ = H_y)
+    уравнения имеют вид rot E~ = i k0^2 H~ и rot H~ = -i eps E~. Для TM-моды,
+    зависящей от x как exp(i k0 n_eff x), отличны от нуля только
+
+        (rot E)_y = dE_x/dz - dE_z/dx,   (rot H)_x = -dH_y/dz,
+                                         (rot H)_z =  dH_y/dx,
+
+    поэтому проверка сводится к трём числам. Производная по x берётся
+    аналитически (i k0 n_eff), по z - центральной разностью строго внутри
+    одного слоя: на границе dE_x/dz терпит разрыв, а E_z разрывна сама.
+
+    Именно эта проверка ловит потерю множителя k0 у E_z: без него невязка
+    Фарадея составляет около 94 %, а не 1e-7.
+    """
+    print("6. Невязка уравнений Максвелла для восстановленного поля")
+    lam = 1.55
+    k0 = materials.k0_from_lambda(lam)
+    stack = Stack(
+        eps=(materials.EPS_ZPU450, materials.EPS_AU_1550, materials.EPS_ZPU450),
+        thickness=(0.014,),
+        names=("полимер", "Au", "полимер"),
+    )
+    neff = solve_mode(stack, k0, 1.4512 + 1e-5j)
+    edges = stack.interfaces()
+
+    # точки строго внутри слоёв, с запасом на шаг разности. Середину плёнки
+    # брать нельзя: у чётной моды там dH_y/dz = 0 тождественно, и относительная
+    # невязка делится на нуль. Поэтому металл зондируется со смещением.
+    h = 2e-5
+    probes = [
+        ("обкладка снизу", -0.60),
+        ("металл, четверть толщины", edges[0] + 0.25 * stack.thickness[0]),
+        ("обкладка сверху", edges[-1] + 0.60),
+    ]
+
+    worst_far, worst_amp_x, worst_amp_z = 0.0, 0.0, 0.0
+    for _, z0 in probes:
+        zz = np.array([z0 - h, z0, z0 + h])
+        hy, ex, ez = mode_fields(neff, stack, k0, zz)
+        eps_here = stack.eps_at(np.array([z0]))[0]
+
+        dex_dz = (ex[2] - ex[0]) / (2.0 * h)
+        dhy_dz = (hy[2] - hy[0]) / (2.0 * h)
+        dez_dx = 1j * k0 * neff * ez[1]
+        dhy_dx = 1j * k0 * neff * hy[1]
+
+        # каждое уравнение нормируется на масштаб входящих в него слагаемых,
+        # с полом k0|H|: иначе в точке, где слагаемое случайно обращается в
+        # нуль, относительная невязка теряет смысл
+        floor = k0 * abs(hy[1])
+
+        # Фарадей: (rot E)_y = i k0^2 H_y
+        rot_e_y = dex_dz - dez_dx
+        scale_e = max(abs(dex_dz), abs(dez_dx), k0 * floor)
+        worst_far = max(worst_far, abs(rot_e_y - 1j * k0 * k0 * hy[1]) / scale_e)
+
+        # Ампер: (rot H)_x = -i eps E_x, (rot H)_z = -i eps E_z
+        scale_x = max(abs(dhy_dz), abs(eps_here * ex[1]), floor)
+        scale_z = max(abs(dhy_dx), abs(eps_here * ez[1]), floor)
+        worst_amp_x = max(worst_amp_x, abs(-dhy_dz + 1j * eps_here * ex[1]) / scale_x)
+        worst_amp_z = max(worst_amp_z, abs(dhy_dx + 1j * eps_here * ez[1]) / scale_z)
+
+    # порог 1e-6 отвечает ошибке центральной разности: обе эти невязки содержат
+    # численную производную по z. Компонента z берёт производную аналитически,
+    # поэтому её порог машинный
+    check("закон Фарадея выполнен", worst_far < 1e-6, f"макс. невязка {worst_far:.2e}")
+    check("закон Ампера, компонента x", worst_amp_x < 1e-6, f"макс. невязка {worst_amp_x:.2e}")
+    check("закон Ампера, компонента z", worst_amp_z < 1e-12, f"макс. невязка {worst_amp_z:.2e}")
+
+    # независимая проверка масштаба E_z: в обкладке |E_z / E_x| = beta / kappa_d
+    z_probe = np.array([edges[-1] + 0.60])
+    hy, ex, ez = mode_fields(neff, stack, k0, z_probe)
+    kappa_d = k0 * decaying_sqrt(neff * neff - stack.eps[-1])
+    expected = abs(k0 * neff / kappa_d)
+    got = abs(ez[0] / ex[0])
+    check(
+        "отношение |E_z / E_x| в обкладке равно beta / kappa",
+        abs(got - expected) / expected < 1e-9,
+        f"расчёт {got:.6f}, аналитика {expected:.6f}",
+    )
+
+
 def main() -> int:
     print("Самопроверка ядра slabmodes\n")
     test_three_layer_equivalence()
@@ -273,6 +363,7 @@ def main() -> int:
     test_maier_symmetric_film()
     test_dielectric_slab()
     test_field_reconstruction()
+    test_maxwell_residual()
     print()
     if FAILURES:
         print(f"ПРОВАЛЕНО проверок: {len(FAILURES)}")
