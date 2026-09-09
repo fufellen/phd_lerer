@@ -30,7 +30,7 @@ def read_solar():
 
 
 def plot_solar(data):
-    fig, axs = plt.subplots(1, 3, figsize=(15.5, 4.8))
+    fig, axs = plt.subplots(1, 3, figsize=(15.5, 7.6))
     wl, g = S.am15g()
     ax = axs[0]
     for d in ("original", "improved_no_mirror", "improved"):
@@ -48,7 +48,7 @@ def plot_solar(data):
     ax.set_title("Солнечная полоса 0,3…4 мкм", fontsize=10)
     ax.grid(alpha=0.3)
     h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
-    ax.legend(h1 + h2, l1 + l2, fontsize=8, loc="center right")
+    ax.legend(h1 + h2, l1 + l2, fontsize=7.5, loc="upper right")
     ax = axs[1]
     for d in ("original", "improved_no_mirror", "improved"):
         arr = data[(d, "lerer_fit")]
@@ -68,7 +68,7 @@ def plot_solar(data):
     ax.set_title("Тепловой ИК 2,5…50 мкм", fontsize=10)
     ax.grid(alpha=0.3, which="both")
     h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
-    ax.legend(h1 + h2, l1 + l2, fontsize=7, loc="center right")
+    ax.legend(h1 + h2, l1 + l2, fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=1)
     ax = axs[2]
     Ts = np.linspace(320, 800, 25)
     for d in ("original", "improved_no_mirror", "improved"):
@@ -86,7 +86,7 @@ def plot_solar(data):
     ax.set_ylim(-0.2, 1.0)
     ax.set_title("η = α_s − ε_th σT⁴ / (C·1000 Вт/м²)", fontsize=10)
     ax.grid(alpha=0.3)
-    ax.legend(fontsize=7, loc="lower left")
+    ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=1)
     fig.suptitle("Столбиковый поглотитель как селективный солнечный поглотитель: нормальное падение, "
                  "матрица и прослойка без потерь в ИК, золото Au.txt + Друде", fontsize=10)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
@@ -113,7 +113,7 @@ def plot_ri():
         ax.set_ylabel("доля мощности")
         ax.set_ylim(0, 1.02)
         ax.grid(alpha=0.3)
-        ax.legend(fontsize=7, loc="center right")
+        ax.legend(fontsize=7, loc="center left")
     fig.suptitle("Поглотитель как рефрактометрический датчик: воздух (сплошные), вода 1,33 (штрих) и раствор 1,35 (пунктир) "
                  "над столбиками и в зазорах", fontsize=10)
     fig.tight_layout(rect=(0, 0, 1, 0.94))
