@@ -1,0 +1,4 @@
+__pycache__/
+*.log
+ALLDONE.flag
+run_rest.sh
