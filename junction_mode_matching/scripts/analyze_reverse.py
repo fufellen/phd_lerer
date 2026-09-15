@@ -29,7 +29,9 @@ def main():
     # последняя строка на случай выигрывает (повторные прогоны дописываются)
     cases = {}
     for r in rows:
-        cases[r["case"]] = r
+        name = r["case"] if abs(float(r["l_pcm_um"]) - 3.0) < 1e-6 else r["case"] + "_lp%d" % round(float(r["l_pcm_um"]) * 100)
+        r["case"] = name
+        cases[name] = r
     out = io.open(os.path.join(dst, "reverse_summary.csv"), "w", encoding="utf-8", newline="\n")
     out.write("case,scheme,dir,state,mesh,l_feed,l_pcm,elements,neff1_re,neff1_im,neff2_re,neff2_im,alpha1_1um,alpha2_1um,"
               "S_refl_abs2,S_trans_abs2,T_joint,loss_dB,R_joint_dB\n")
