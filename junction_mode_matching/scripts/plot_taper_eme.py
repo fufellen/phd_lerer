@@ -42,19 +42,19 @@ def main():
         axes[0].bar(x + (k - (len(Ls) - 1) / 2) * w, loss, w, color=colors[k], label="L = %.2f мкм" % L)
         axes[1].bar(x + (k - (len(Ls) - 1) / 2) * w, loss_eq, w, color=colors[k], label="L = %.2f мкм" % L)
         axes[2].bar(x + (k - (len(Ls) - 1) / 2) * w, conv, w, color=colors[k], label="L = %.2f мкм" % L)
-    for ax, title, ylab in ((axes[0], "потери перехода как такового", "−10 lg T, дБ (доля мощности в рабочей моде в конце перехода)"),
-                            (axes[1], "мера трёхмерной модели: относительно перехода без металла сверх рабочего", "−10 lg (T·exp(α₄₅₀L)), дБ; ниже нуля — меньше металла, чем в рабочей секции"),
-                            (axes[2], "потери преобразования: T относительно exp(−∫α dz)", "−10 lg (T/T_ад), дБ")):
+    for ax, title, ylab in ((axes[0], "потери перехода как такового\n(доля мощности в рабочей моде в конце перехода)", "−10 lg T, дБ"),
+                            (axes[1], "мера трёхмерной модели\n(ниже нуля — металла меньше, чем в рабочей секции той же длины)", "−10 lg (T·exp(α₄₅₀L)), дБ"),
+                            (axes[2], "потери преобразования\n(T относительно адиабатического exp(−∫α dz))", "−10 lg (T/T_ад), дБ")):
         ax.set_xticks(x)
         ax.set_xticklabels([RU[s] for s in shapes], rotation=35, ha="right", fontsize=8)
-        ax.set_title(title, fontsize=9)
-        ax.set_ylabel(ylab, fontsize=8)
+        ax.set_title(title, fontsize=9, pad=10)
+        ax.set_ylabel(ylab, fontsize=8, labelpad=6)
         ax.grid(alpha=0.3, axis="y")
         ax.axhline(0, color="k", lw=0.6)
         ax.legend(fontsize=7)
     fig.suptitle("Каскад местных мод (femwell, 100 мод, 25 сечений): переход по ширине золота против формы острия и длины", fontsize=10)
-    fig.tight_layout()
-    fig.savefig(os.path.join(dst, "taper_eme_shapes.png"), dpi=150)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    fig.savefig(os.path.join(dst, "taper_eme_shapes.png"), dpi=150, bbox_inches="tight")
 
     # ветвь alpha(w)
     br = list(csv.DictReader(io.open(branch_path, encoding="utf-8")))
