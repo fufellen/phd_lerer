@@ -99,3 +99,18 @@ factor, mutual coupling, splitter imbalance, thermal crosstalk, wavelength
 dispersion or full-vector PCM phase-shifter fields. The phase-dependent-loss
 law assumes a segmented device with linearly mixed amorphous and crystalline
 lengths.
+
+## Pattern of a real emitter (`element_pattern_scan.py`)
+
+```powershell
+python opa_pcm/scripts/element_pattern_scan.py
+```
+
+The array factor of N = 32 isotropic elements multiplied by the power pattern of a real emitter:
+a silicon wire 450 x 220 nm ending in air, pitch lambda/2, from the full-wave COMSOL model of the
+emitter array (`data/element_patterns_z300.csv`: plane-wave spectrum of the field 0.3 um in front
+of the facets; the isolated wire and the four channels of a four-emitter array, each with its own
+port excited). Two element patterns are used: the isolated wire and the mean of the two middle
+channels of the four. Ideal shifters; the element pattern multiplies the power pattern whatever the
+shifter does. Outputs: `results/element_pattern_scan_n32.csv` (pointing error, highest sidelobe and
+scan loss for target angles -60...60 deg) and `results/element_pattern_scan_n32.png`.
