@@ -3,6 +3,8 @@
 цилиндров (mixing_rules_on_grating.py), но на конструкции статьи о столбиках; таблица золота Лерера.
 
 Запуск: python mixing_rules_on_pillars.py -> results/mixing_rules_on_pillars.csv, _summary.txt
+        python mixing_rules_on_pillars.py --table jc -> то же по золоту Джонсона-Кристи, файлы с суффиксом _jc
+        (основной расчёт по таблице Лерера не перезаписывается).
 """
 from __future__ import annotations
 
@@ -18,7 +20,9 @@ import lerer_grcwa as L  # noqa: E402
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-AU = L.AuModel("lerer")
+TABLE = sys.argv[sys.argv.index("--table") + 1] if "--table" in sys.argv else "lerer"
+AU = L.AuModel(TABLE)
+SUFFIX = "" if TABLE == "lerer" else "_" + TABLE
 LAMS = list(range(400, 751, 10))
 FORMULAS = ["MG", "Bruggeman", "MLWA15", "Lerer"]
 EPS_H = complex(L.N_HOST ** 2, 0.0)
@@ -26,7 +30,7 @@ EPS_H = complex(L.N_HOST ** 2, 0.0)
 
 def main():
     t0 = time.time()
-    out = io.open(L.RESULTS / "mixing_rules_on_pillars.csv", "w", encoding="utf-8", newline="\n")
+    out = io.open(L.RESULTS / ("mixing_rules_on_pillars%s.csv" % SUFFIX), "w", encoding="utf-8", newline="\n")
     out.write("design,formula,lambda_nm,Re_eps_eff,Im_eps_eff,R,T,A\n")
     res = {}
     for design_name, d in (("original", L.ORIGINAL), ("improved", L.IMPROVED)):
@@ -59,7 +63,7 @@ def main():
             lines.append("  %-10s среднее %.4f, A(750) %.3f, min %.3f при %d нм" % (f, a.mean(), a[-1], a.min(), LAMS[int(np.argmin(a))]))
     txt = "\n".join(lines) + "\n"
     print(txt)
-    io.open(L.RESULTS / "mixing_rules_on_pillars_summary.txt", "w", encoding="utf-8").write(txt)
+    io.open(L.RESULTS / ("mixing_rules_on_pillars_summary%s.txt" % SUFFIX), "w", encoding="utf-8").write(txt)
 
 
 if __name__ == "__main__":

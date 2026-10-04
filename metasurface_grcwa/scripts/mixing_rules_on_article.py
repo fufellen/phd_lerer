@@ -14,8 +14,9 @@
 симметричная модель Бруггемана, MLWA10 и MLWA15 - Максвелл-Гарнетт через поляризуемость сферы с
 поправкой MLWA при радиусе 10 и 15 нм, Lerer - линейная по концентрации запись Лерера.
 
-Запуск: python mixing_rules_on_article.py [conv|main|summary|all]
-Выход: results/mixing_rules_on_article*.csv|txt
+Запуск: python mixing_rules_on_article.py [conv|main|summary|all] [--table jc|lerer]
+Выход: results/mixing_rules_on_article*.csv|txt; с --table lerer (золото по таблице Au.txt программы
+Лерера вместо Джонсона-Кристи) - те же файлы с суффиксом _lerer, основные не перезаписываются.
 """
 from __future__ import annotations
 
@@ -39,8 +40,11 @@ LAMS = list(range(400, 901, 5))
 FORMULAS = ["MG", "Bruggeman", "MLWA10", "MLWA15", "Lerer"]
 MIX = dict(L.MIXING)
 MIX["MLWA10"] = lambda eh, ep, f, lam: L.mlwa_mg(eh, ep, f, lam, 10.0)
-AU = L.AuModel("jc")
-OUT = L.RESULTS / "mixing_rules_on_article.csv"
+TABLE = sys.argv[sys.argv.index("--table") + 1] if "--table" in sys.argv else "jc"
+AU = L.AuModel(TABLE)
+SUFFIX = "" if TABLE == "jc" else "_" + TABLE
+TABLE_RU = {"jc": "Au по Джонсону-Кристи", "lerer": "Au по таблице Лерера Au.txt"}[TABLE]
+OUT = L.RESULTS / ("mixing_rules_on_article%s.csv" % SUFFIX)
 
 # Записанные ранее значения той же структуры при формуле MG - контроль, что решается та же задача:
 # собственная двумерная RCWA (N = 5, 121 гармоника) и сторонний grcwa главы 4 диссертации (11 гармоник).
@@ -76,7 +80,8 @@ def run_conv():
             rec.append("grcwa главы 4 %.4f" % RECORDED_GRCWA_CH4[lam])
         lines.append("  %d нм: A = %.4f; записано: %s" % (lam, a, ", ".join(rec)))
         print(lines[-1])
-    io.open(L.RESULTS / "mixing_rules_on_article_convergence.txt", "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    io.open(L.RESULTS / ("mixing_rules_on_article_convergence%s.txt" % SUFFIX), "w",
+            encoding="utf-8").write("\n".join(lines) + "\n")
 
 
 def run_main():
@@ -102,7 +107,7 @@ def summarize():
     T = {f: get(f, "T") for f in FORMULAS}
     im = {f: get(f, "Im_eps_eff") for f in FORMULAS}
     lines = ["метаповерхность статьи: период 500 нм, цилиндры 400 x 100 нм, слой 100 нм, подложка 1,45; "
-             "Au по Джонсону-Кристи, C = 0,10, n_h = 1,77; nG = %d" % NG]
+             "%s, C = 0,10, n_h = 1,77; nG = %d" % (TABLE_RU, NG)]
     at = (450, 500, 550, 600, 650, 700, 750, 800, 850, 900)
     lines.append("формула    макс. A (нм)     среднее 400-900  среднее 400-650  " + " ".join("A(%d)" % x for x in at))
     for f in FORMULAS:
@@ -136,11 +141,11 @@ def summarize():
         lines.append("  %d нм: %s" % (x, "; ".join("%s %.3f / %.3f" % (f, R[f][k], T[f][k]) for f in FORMULAS)))
     txt = "\n".join(lines) + "\n"
     print(txt)
-    io.open(L.RESULTS / "mixing_rules_on_article_summary.txt", "w", encoding="utf-8").write(txt)
+    io.open(L.RESULTS / ("mixing_rules_on_article_summary%s.txt" % SUFFIX), "w", encoding="utf-8").write(txt)
 
 
 if __name__ == "__main__":
-    which = sys.argv[1] if len(sys.argv) > 1 else "all"
+    which = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "all"
     t0 = time.time()
     if which in ("conv", "all"):
         run_conv()
