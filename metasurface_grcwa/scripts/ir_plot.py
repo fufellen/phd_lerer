@@ -31,6 +31,7 @@ def media():
     return d
 
 
+plt.rcParams.update({"font.size": 12})
 COL = {"TiN_R17": "#1f77b4", "TiN_S22": "#1f77b4", "TiN_P84": "#1f77b4", "ZrN_N11": "#2ca02c", "AZO_S22": "#d62728",
        "Al_R98": "#7f7f7f", "Cu_JC": "#ff7f0e"}
 STY = {"TiN_S22": "--", "TiN_P84": ":"}
@@ -38,9 +39,9 @@ STY = {"TiN_S22": "--", "TiN_P84": ":"}
 
 def materials():
     lams = np.arange(400.0, 2001.0, 5.0)
-    fig, ax = plt.subplots(1, 3, figsize=(14.5, 4.6))
+    fig, ax = plt.subplots(1, 3, figsize=(12, 4.6))
     eh = L.N_HOST ** 2
-    for n in ("TiN_R17", "TiN_S22", "TiN_P84", "ZrN_N11", "AZO_S22", "Al_R98", "Cu_JC"):
+    for n in ("TiN_R17", "TiN_S22", "ZrN_N11", "AZO_S22", "Al_R98", "Cu_JC"):
         e = np.array([M.MATERIALS[n](float(x)) for x in lams])
         ax[0].plot(lams, e.real, color=COL[n], ls=STY.get(n, "-"), lw=1.8, label=M.LABEL[n])
         ax[1].plot(lams, e.imag, color=COL[n], ls=STY.get(n, "-"), lw=1.8)
@@ -50,22 +51,22 @@ def materials():
             att.append(4.343 * 4 * np.pi * nn.imag / x * 2000.0)
         ax[2].plot(lams, att, color=COL[n], ls=STY.get(n, "-"), lw=1.8)
     ax[0].axhline(-2 * eh, color="k", lw=1.0, ls="-.")
-    ax[0].text(830, -2 * eh + 1.1, "Re ε = −2εₕ = −6,27 (условие Фрёлиха)", fontsize=8.5)
+    ax[0].text(900, -2 * eh + 1.1, "Re ε = −6,27", fontsize=11)
     ax[0].set_yscale("symlog", linthresh=10)
     ax[0].set_ylabel("Re ε частицы")
     ax[1].set_yscale("log")
     ax[1].set_ylabel("Im ε частицы")
     ax[2].set_yscale("log")
     ax[2].axhline(10.0, color="k", lw=1.0, ls="-.")
-    ax[2].text(1040, 11.5, "непрозрачный слой: 10 дБ", fontsize=9)
+    ax[2].text(1020, 12, "10 дБ", fontsize=11)
     ax[2].set_ylabel("Ослабление за проход слоя 2 мкм, дБ")
     for a in ax:
         a.set_xlabel("Длина волны, нм")
         a.set_xlim(400, 2000)
         a.grid(alpha=0.3, which="both")
     handles, labels = ax[0].get_legend_handles_labels()
-    fig.legend(handles, labels, fontsize=9, loc="lower center", ncol=7, frameon=False)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.legend(handles, labels, fontsize=11, loc="lower center", ncol=3, frameon=False)
+    fig.tight_layout(rect=(0, 0.17, 1, 1))
     out = media() / "ИК материалы — проницаемость и ослабление.png"
     fig.savefig(out, dpi=170)
     print(out)
@@ -82,7 +83,7 @@ def scheme():
     for k in range(-1, 2):
         c = x0 + k * p
         a.add_patch(plt.Rectangle((c - w / 2 + 0.5, 0.0), w, hp, color="#c58b6b"))
-    a.text(0.5, -hl / 2, "слой композита: основа n = 1,77 + наночастицы; толщина $h_c$", ha="center", va="center", fontsize=9.5)
+    a.text(0.5, -hl / 2, "слой композита: матрица n = 1,77 с наночастицами; толщина $h_c$", ha="center", va="center", fontsize=9.5)
     a.text(0.5, -hl - hb / 2, "буфер n = 1,45; 325 нм", ha="center", va="center", fontsize=9.5)
     a.text(0.5, -hl - hb - 0.25, "подложка n = 1,45", ha="center", va="center", fontsize=9.5)
     a.annotate("", xy=(1.0, 0.0), xytext=(1.0, hp), arrowprops=dict(arrowstyle="<->"))
@@ -128,7 +129,7 @@ def spectra():
             best[k] = r
     cols = [c for c in rows[0] if c.startswith("A") and c[1:].isdigit()]
     lams = np.array([float(c[1:]) for c in cols])
-    fig, ax = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
+    fig, ax = plt.subplots(1, 2, figsize=(11.5, 5), sharey=True)
     single = ("TiN", "ZrN", "AZO", "Al", "Cu")
     mix = ("Cu+AZO_05", "TiN+AZO_05", "ZrN+AZO_05", "Cu+TiN_05", "Cu+AZO_10", "TiN+AZO_10", "ZrN+AZO_10")
     palette = plt.get_cmap("tab10").colors
@@ -147,7 +148,7 @@ def spectra():
         a.set_xlim(400, 2000)
         a.set_ylim(0, 1)
         a.grid(alpha=0.3)
-        a.legend(fontsize=8.5, ncol=4, loc="upper center", bbox_to_anchor=(0.5, -0.13), frameon=False)
+        a.legend(fontsize=9.5, ncol=3, loc="upper center", bbox_to_anchor=(0.5, -0.15), frameon=False, columnspacing=0.8, handlelength=1.8)
     ax[0].set_ylabel("Поглощение A")
     fig.tight_layout()
     out = media() / "ИК лучшие конструкции — спектры поглощения.png"
@@ -157,7 +158,7 @@ def spectra():
 
 def field(combo, h_layer, period, ax, h_p, lams, ng=121, nx=120):
     """Карта |E|^2 в плоскости x-z через центр столбика; нормировка на падающую волну."""
-    fig, axes = plt.subplots(1, len(lams), figsize=(4.6 * len(lams), 5.4))
+    fig, axes = plt.subplots(1, len(lams), figsize=(4.0 * len(lams), 4.4))
     if len(lams) == 1:
         axes = [axes]
     top_air = 0.25

@@ -28,7 +28,8 @@ for name in ("ir_refine.csv", "ir_sens.csv"):
             four[r["combo"]] = np.array([float(r[c]) for c in cols])
 lams = np.array([float(c[1:]) for c in cols])
 
-fig, ax = plt.subplots(1, 3, figsize=(15, 4.6))
+plt.rcParams.update({"font.size": 12})
+fig, ax = plt.subplots(1, 3, figsize=(13, 4.6))
 for combo, col in (("ZrN+AZO_10", "#d62728"), ("TiN+AZO_10", "#1f77b4")):
     v = np.array([vibr[combo][x] for x in lams])
     f = four[combo]
@@ -37,19 +38,19 @@ for combo, col in (("ZrN+AZO_10", "#d62728"), ("TiN+AZO_10", "#1f77b4")):
     print("%-11s программа: мин A=%.4f при %g нм, ср.=%.4f, ш.0.9=%.0f (%s-%s); Фурье: мин %.4f при %g; |разность| макс=%.4f при %g, ср.кв=%.4f" % (
         combo, v.min(), lams[v.argmin()], v.mean(), w[0], w[1], w[2], f.min(), lams[f.argmin()], np.abs(d).max(), lams[np.abs(d).argmax()], np.sqrt((d ** 2).mean())))
     lab = combo.replace("_10", " по 0,10")
-    ax[0].plot(lams, f, color=col, lw=2.0, label="%s, метод фурье-мод" % lab)
-    ax[0].plot(lams, v, color="k" if combo.startswith("ZrN") else "#555555", lw=0, marker="o", ms=3.2, label="%s, программа Лерера" % lab)
+    ax[0].plot(lams, f, color=col, lw=2.0, label="%s, метод Фурье-мод" % lab)
+    ax[0].plot(lams, v, color="k" if combo.startswith("ZrN") else "#555555", lw=0, marker="o", ms=3.2, label="%s, программа VIBR_T" % lab)
     ax[1].plot(lams, d, color=col, lw=1.8, label=lab)
 ax[0].axhline(0.9, color="k", lw=0.9, ls="-.")
 ax[0].set_ylim(0.8, 1.0)
 ax[0].set_ylabel("Поглощение A")
 ax[0].legend(fontsize=8.5, loc="lower right")
 ax[1].axhline(0, color="k", lw=0.8)
-ax[1].set_ylabel("A программы − A метода фурье-мод")
+ax[1].set_ylabel("A программы VIBR_T − A метода Фурье-мод")
 ax[1].legend(fontsize=9)
 for combo, col, lab, ls in (("ZrN+AZO_10", "#d62728", "ZrN (Naik) + AZO 63 нм", "-"), ("ZrN+AZO57_10", "#d62728", "ZrN (Naik) + AZO 57 нм", "--"),
                             ("TiN+AZO_10", "#1f77b4", "TiN (Reddy) + AZO 63 нм", "-"), ("TiN+AZO57_10", "#1f77b4", "TiN (Reddy) + AZO 57 нм", "--"),
-                            ("TiN_S22+AZO_10", "#2ca02c", "TiN (Saha) + AZO 63 нм", "-"), ("TiN_P84+AZO_10", "#9467bd", "TiN (Pflüger) + AZO 63 нм", "-")):
+                            ("TiN_S22+AZO_10", "#2ca02c", "TiN (Saha) + AZO 63 нм", "-")):
     ax[2].plot(lams, four[combo], color=col, ls=ls, lw=1.7, label=lab)
     w = C.band(lams, four[combo], 0.9)
     print("%-16s мин %.3f при %g, ср.=%.3f, ш.0.9=%.0f (%s-%s)" % (combo, four[combo].min(), lams[four[combo].argmin()], four[combo].mean(), w[0], w[1], w[2]))
