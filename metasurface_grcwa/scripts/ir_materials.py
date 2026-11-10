@@ -116,7 +116,16 @@ def eps_zrn_naik(lam):
     return ce.eps_zrn(float(lam)).conjugate()
 
 
+import lerer_library as LL  # noqa: E402
+
+
+def _ll(name):
+    return lambda lam: LL.eps(name, float(lam))
+
+
 MATERIALS = {
+    "TiN_LL": _ll("TiN"), "ZrN_LL": _ll("ZrN"), "HfN_LL": _ll("HfN"), "TaN_LL": _ll("TaN"),
+    "AZO20_LL": _ll("AZO_wt_2_0"), "AZO08_LL": _ll("AZO_wt_0_8"), "AZO32_LL": _ll("AZO_wt_3_2"), "AZO2_LL": _ll("AZO_2"),
     "TiN_R17": eps_tin_reddy, "TiN_S22": eps_tin_saha, "TiN_P84": eps_tin_pfluger, "ZrN_N11": eps_zrn_naik,
     "AZO_S22": eps_azo_saha63, "AZO_S22b": eps_azo_saha57, "Al_R98": eps_al_rakic, "Al_L": eps_al_lerer,
     "Cu_JC": eps_cu_jc, "Cu_R98": eps_cu_rakic, "Cu_L": eps_cu_lerer,
@@ -124,7 +133,10 @@ MATERIALS = {
 MAIN = ("TiN_R17", "ZrN_N11", "AZO_S22", "Al_R98", "Cu_JC")
 LABEL = {"TiN_R17": "TiN (Reddy 2017)", "TiN_S22": "TiN (Saha 2022)", "TiN_P84": "TiN (Pflüger 1984)", "ZrN_N11": "ZrN (Naik 2011)",
          "AZO_S22": "AZO (Saha 2022, 63 нм)", "AZO_S22b": "AZO (Saha 2022, 57 нм)", "Al_R98": "Al (Rakić 1998)", "Al_L": "Al (программа Лерера)",
-         "Cu_JC": "Cu (Johnson, Christy)", "Cu_R98": "Cu (Rakić 1998)", "Cu_L": "Cu (программа Лерера)"}
+         "Cu_JC": "Cu (Johnson, Christy)", "Cu_R98": "Cu (Rakić 1998)", "Cu_L": "Cu (программа Лерера)",
+         "TiN_LL": "TiN (библиотека Лерера)", "ZrN_LL": "ZrN (библиотека Лерера)", "HfN_LL": "HfN (библиотека Лерера)", "TaN_LL": "TaN (библиотека Лерера)",
+         "AZO20_LL": "AZO 2 % (библиотека Лерера)", "AZO08_LL": "AZO 0,8 % (библиотека Лерера)", "AZO32_LL": "AZO 3,2 % (библиотека Лерера)",
+         "AZO2_LL": "AZO, второй источник (библиотека Лерера)"}
 
 
 def frohlich(name, eps_h=L.N_HOST ** 2, lo=300.0, hi=4000.0):

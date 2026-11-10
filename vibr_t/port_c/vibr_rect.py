@@ -123,6 +123,48 @@ def input_text(g, b, lam, eps_pillar, eps_layer):
         "", ""])
 
 
+def input_text_layers(g, b, lam, eps_pillar, layers):
+    """То же, что input_text, но под столбиками несколько однородных слоёв [(толщина нм, eps), ...] сверху вниз;
+    буфер g.h_buffer (если > 0) и подложка g.n_sub как в input_text."""
+    np_, kp = nk(eps_pillar)
+    x = lam / 1.00001
+    lines = [
+        "/ GR / 0",
+        "/ n_eps / 1",
+        "/ if (GR) T /",
+        "/ fl AF / 0 %.7f 100000 %.7f" % (x, lam + 0.5),
+        "/ dx dy / %.6f %.6f" % (g.period, g.period),
+        "/ N_fig / 0",
+        "/ Nsl N_hol Nreg / %d 1 1" % (2 + len(layers) + (1 if g.h_buffer > 0 else 0)),
+        "/ is_l A_t B_t A_b B_b Xc Yc n k / 0 %.6f %.6f %.6f %.6f 0.0 0.0 %.8f %.8f" % (g.ax, g.ay, g.ax, g.ay, np_, kp),
+        "/ n_[1] k_[1] / 1.0 0.0",
+        "/ pillar layer / 0 %.6f 1.0 0.0" % g.h_pillar]
+    for i, (h, e) in enumerate(layers):
+        n_, k_ = nk(e)
+        lines.append("/ composite layer %d / 0 %.6f %.8f %.8f" % (i + 1, h, n_, k_))
+    if g.h_buffer > 0:
+        lines.append("/ buffer / 0 %.6f %.6f 0.0" % (g.h_buffer, g.n_buffer))
+    lines += [
+        "/ substrate / 0 %.6f 0.0" % g.n_sub,
+        "/ ATET FI / 0.0 100 0.0 0.0",
+        "/ AM_z / %d 100000 %d" % (b.m_z, b.m_z),
+        "/ AM_y / %d 100000 %d" % (b.m_xy, b.m_xy),
+        "/ ravn AM_x / 1 %d 100000 %d" % (b.m_xy, b.m_xy),
+        "/ AN_g / %d 100000 %d" % (b.n_g, b.n_g),
+        "/ Near / 0",
+        "/ if Near /", "/ if Near /", "/ if Near /", "/ if Near /",
+        "/ dB / 0",
+        "", ""]
+    return "\n".join(lines)
+
+
+def solve_layers(g, lam, eps_pillar, layers, basis=None, pol="s", timeout=1800, threads=1):
+    r = run_text(input_text_layers(g, basis or Basis(), lam, eps_pillar, layers), timeout, threads)
+    if pol not in r["rows"]:
+        raise RuntimeError("в выводе программы нет чисел (NaN?), lam = %g, код %s" % (lam, r["rc"]))
+    return dict(zip("RTA", r["rows"][pol]), seconds=r["seconds"])
+
+
 def read(path):
     """Строки нулевого порядка: {поляризация: (R, T, delta P)} и найденные числа базиса; строка '1.#QNAN' в разбор не попадёт."""
     text = open(path, "rb").read().decode("cp1251", "replace")
