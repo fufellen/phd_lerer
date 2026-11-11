@@ -7,6 +7,7 @@
   python ir_plot.py field COMBO h_layer period ax h_pillar lam1 [lam2 ...]   карта |E|^2 в разрезе
 """
 import csv
+import os
 import sys
 from pathlib import Path
 
@@ -24,6 +25,25 @@ L = C.L
 NOTE = "Статья 2 — ИК-диапазон — материалы и подбор конструкций"
 
 
+# IR_ARTICLE=1: подписи в терминах статьи и главы 4 (метод ОИДУ, метод фурье-мод, МКЭ), файл с суффиксом « — статья»
+ARTICLE = os.environ.get("IR_ARTICLE") == "1"
+_TERMS = (("программа VIBR_T", "метод ОИДУ"), ("программы VIBR_T", "метода ОИДУ"), ("VIBR_T", "ОИДУ"), ("Фурье-мод", "фурье-мод"),
+          ("COMSOL − ", "МКЭ − "), (" (библиотека Лерера)", ", таблицы программы ОИДУ"))
+
+
+def term(s):
+    if ARTICLE:
+        for a, b in _TERMS:
+            s = s.replace(a, b)
+        if s == "COMSOL":
+            s = "МКЭ (COMSOL)"
+    return s
+
+
+def out_name(name):
+    return name.replace(".png", " — статья.png") if ARTICLE else name
+
+
 def media():
     root = next(p for p in Path.home().glob("Мой диск*/Obsidian/Vault"))
     d = root / "PhD/Scientific_study/Scientific_study/paper_analysis/from_Lerer/от Лерера/Статья 2 ИК" / (NOTE + "_media")
@@ -39,7 +59,7 @@ STY = {"TiN_S22": "--", "TiN_P84": ":"}
 
 def materials():
     lams = np.arange(400.0, 2001.0, 5.0)
-    fig, ax = plt.subplots(1, 3, figsize=(12, 4.6))
+    fig, ax = plt.subplots(1, 3, figsize=(10, 4.4) if ARTICLE else (12, 4.6))
     eh = L.N_HOST ** 2
     for n in ("TiN_R17", "TiN_S22", "ZrN_N11", "AZO_S22", "Al_R98", "Cu_JC"):
         e = np.array([M.MATERIALS[n](float(x)) for x in lams])
@@ -59,7 +79,7 @@ def materials():
     ax[2].set_yscale("log")
     ax[2].axhline(10.0, color="k", lw=1.0, ls="-.")
     ax[2].text(1020, 12, "10 дБ", fontsize=11)
-    ax[2].set_ylabel("Ослабление за проход слоя 2 мкм, дБ")
+    ax[2].set_ylabel("Ослабление за проход 2 мкм, дБ" if ARTICLE else "Ослабление за проход слоя 2 мкм, дБ")
     for a in ax:
         a.set_xlabel("Длина волны, нм")
         a.set_xlim(400, 2000)
@@ -67,7 +87,7 @@ def materials():
     handles, labels = ax[0].get_legend_handles_labels()
     fig.legend(handles, labels, fontsize=11, loc="lower center", ncol=3, frameon=False)
     fig.tight_layout(rect=(0, 0.17, 1, 1))
-    out = media() / "ИК материалы — проницаемость и ослабление.png"
+    out = media() / out_name("ИК материалы — проницаемость и ослабление.png")
     fig.savefig(out, dpi=170)
     print(out)
 

@@ -143,30 +143,30 @@ def main(path):
 def plot(s):
     plt.rcParams.update({"font.size": 12})
     n = len(s)
-    fig, axes = plt.subplots(2, n, figsize=(4.4 * n, 6.4), squeeze=False, sharex="col")
+    fig, axes = plt.subplots(2, n, figsize=(3.7 * n, 6.2) if P.ARTICLE else (4.4 * n, 6.4), squeeze=False, sharex="col")
     for j, (label, (lam, ac, af, av)) in enumerate(s.items()):
         title = {"Au_MG": "Au 0,10; слой 2 мкм", "ZrN+AZO_10": "ZrN + AZO по 0,10; 5 мкм", "TiN+AZO_10": "TiN + AZO по 0,10; 5 мкм"}
         key = next(k for k in title if label.startswith(k))
         a, b = axes[0][j], axes[1][j]
-        a.plot(lam, af, "-", color="#1f77b4", lw=1.9, label="метод Фурье-мод, 221 гармоника")
+        a.plot(lam, af, "-", color="#1f77b4", lw=1.9, label=P.term("метод Фурье-мод, 221 гармоника"))
         vok = ~np.isnan(av)
-        a.plot(lam[vok], av[vok], "o", color="k", ms=4.0, label="программа VIBR_T")
-        a.plot(lam, ac, "s", color="#d62728", ms=4.5, mfc="none", label="COMSOL")
+        a.plot(lam[vok], av[vok], "o", color="k", ms=4.0, label=P.term("программа VIBR_T"))
+        a.plot(lam, ac, "s", color="#d62728", ms=4.5, mfc="none", label=P.term("COMSOL"))
         a.set_title(title[key], fontsize=12)
         a.set_ylabel("Поглощение A")
         a.grid(alpha=0.3)
         if j == 0:
             handles, labels = a.get_legend_handles_labels()
         b.axhline(0, color="k", lw=0.8)
-        b.plot(lam, ac - af, "s-", color="#d62728", ms=4.0, mfc="none", label="COMSOL − Фурье-мод")
-        b.plot(lam[vok], ac[vok] - av[vok], "o-", color="k", ms=3.5, label="COMSOL − VIBR_T")
+        b.plot(lam, ac - af, "s-", color="#d62728", ms=4.0, mfc="none", label=P.term("COMSOL − Фурье-мод"))
+        b.plot(lam[vok], ac[vok] - av[vok], "o-", color="k", ms=3.5, label=P.term("COMSOL − VIBR_T"))
         b.set_xlabel("Длина волны, нм")
         b.set_ylabel("Разность A")
         b.grid(alpha=0.3)
         b.legend(fontsize=9.5)
     fig.legend(handles, labels, loc="upper center", ncol=3, fontsize=11, frameon=False)
     fig.tight_layout(rect=(0, 0, 1, 0.95))
-    out = P.media() / "COMSOL против метода Фурье-мод и программы VIBR_T.png"
+    out = P.media() / P.out_name("COMSOL против метода Фурье-мод и программы VIBR_T.png")
     fig.savefig(out, dpi=170)
     print(out)
 

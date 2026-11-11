@@ -63,7 +63,7 @@ def main():
             k = best[(p, kind)][1]
             a.plot(lams, d[(p, k)]["A"], color=colors[kind], lw=1.7, label=names[kind])
         a.axhline(0.9, color="k", lw=0.8, ls="-.")
-        title = p.replace("_LL", " (библиотека Лерера)")
+        title = P.term(p.replace("_LL", " (библиотека Лерера)"))
         a.set_title(title, fontsize=11)
         a.set_ylim(0.3, 1.0)
         a.grid(alpha=0.3)
@@ -76,7 +76,7 @@ def main():
     h, l = axes.flat[0].get_legend_handles_labels()
     fig.legend(h, l, loc="upper center", ncol=3, frameon=False, fontsize=11)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
-    out = P.media() / "Две конструкции — смесь и раздельные слои — поглощение.png"
+    out = P.media() / P.out_name("Две конструкции — смесь и раздельные слои — поглощение.png")
     fig.savefig(out, dpi=160)
     print(out)
 
@@ -88,7 +88,7 @@ def main():
                 continue
             k = best[(p, kind)][1]
             a.plot(lams, 10 * np.log10(np.maximum(d[(p, k)]["R"], 1e-5)), color=colors[kind], lw=1.5, label=names[kind])
-        a.set_title(p.replace("_LL", " (библиотека Лерера)"), fontsize=11)
+        a.set_title(P.term(p.replace("_LL", " (библиотека Лерера)")), fontsize=11)
         a.set_ylim(-40, 0)
         a.grid(alpha=0.3)
     for a in axes.flat[n:]:
@@ -99,7 +99,7 @@ def main():
         a.set_ylabel("Отражение R, дБ")
     fig.legend(h, l, loc="upper center", ncol=3, frameon=False, fontsize=11)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
-    out = P.media() / "Две конструкции — смесь и раздельные слои — отражение.png"
+    out = P.media() / P.out_name("Две конструкции — смесь и раздельные слои — отражение.png")
     fig.savefig(out, dpi=160)
     print(out)
 
